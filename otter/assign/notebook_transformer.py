@@ -17,6 +17,7 @@ from .solutions import (
     overwrite_seed_vars,
     strip_ignored_lines,
     strip_solutions_and_output,
+    handle_md_cell_config,
 )
 from .tests_manager import AssignmentTestsManager
 from .utils import (
@@ -291,6 +292,7 @@ class NotebookTransformer:
                     cell = add_tag(cell, SOLUTION_CELL_TAG)
 
                     if is_cell_type(cell, "markdown"):
+                        cell = handle_md_cell_config(cell)
                         solution_has_md_cells = True
 
                 elif curr_block[-1] == BlockType.QUESTION and is_cell_type(cell, "markdown"):

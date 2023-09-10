@@ -5,7 +5,7 @@ import re
 
 from .r_adapter import solutions as r_solutions
 from .utils import get_notebook_language, get_source, has_tag, is_cell_type, remove_output, \
-    remove_tag
+    remove_tag, add_tag
 
 
 BLOCK_PROMPT = "..."
@@ -208,21 +208,46 @@ def strip_solutions_and_output(nb):
     """
     nb = copy.deepcopy(nb)
 
-    md_solutions = []
+    del_md_solutions = []
     lang = get_notebook_language(nb)
     for i, cell in enumerate(nb['cells']):
         if has_tag(cell, SOLUTION_CELL_TAG):
             if is_cell_type(cell, "code"):
                 cell['source'] = '\n'.join(replace_solutions(get_source(cell), lang))
             elif is_cell_type(cell, "markdown"):
-                md_solutions.append(i)
+                if has_tag(cell, SOLUTION_INCLUDE_MD_TAG):
+                    remove_tag(cell, SOLUTION_INCLUDE_MD_TAG)
+                else:
+                    del_md_solutions.append(i)
             nb['cells'][i] = remove_tag(cell, SOLUTION_CELL_TAG)
 
-    md_solutions.reverse()
-    for i in md_solutions:
+    del_md_solutions.reverse()
+    for i in del_md_solutions:
         del nb['cells'][i]
 
     # remove output from student version
     remove_output(nb)
 
     return nb
+
+SOLUTION_INCLUDE_MD_TAG = "otter_assign_solution_include_md"
+INCLUDE_MD_REGEX = re.compile(r"<!---?\s*\n*\s*INCLUDESTUDENT\s*\n*\s*-->\s*\n")
+
+def handle_md_cell_config(cell):
+    """
+    Removes solution markdown cell config text (if present) 
+    and updates cell with corresponding config, returning a copy.
+    Specifically handles the INCLUDESTUDENT tag. 
+
+    Args:
+        cell (``nbformat.NotebookNode``): the solution markdown cell
+
+    Returns:
+        ``nbformat.NotebookNode``: a copy of ``cell`` with the updated config
+    """
+    cell = copy.deepcopy(cell)
+    new_source = re.sub(INCLUDE_MD_REGEX, '', cell.source)
+    if len(new_source) < len(cell.source):
+        cell = add_tag(cell, SOLUTION_INCLUDE_MD_TAG)
+        cell.source = new_source
+    return cell
