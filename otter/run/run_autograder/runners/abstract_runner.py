@@ -57,6 +57,20 @@ class AbstractLanguageRunner(ABC):
         ``self.ag_config.autograder_dir``.
         """
         # put files into submission directory
+        print('WORKING DIR prepare_files: ', os.getcwd())
+        print('FILES: ', '\n'.join(os.listdir('.')))
+        print('SOURCE FILES: ', '\n'.join(os.listdir('./source')))
+        print('SOURCE/FILES files: ', '\n'.join(os.listdir('./source/files')))
+        print('submission files: ', '\n'.join(os.listdir('./submission')))
+        print('files retirement')
+        with open('./source/files/retirement.py') as infile:
+            print(infile.read())
+        print('--------')
+        print('submission retirement')
+        with open('./submission/retirement.py') as infile:
+            print(infile.read())
+        print('-------')
+
         if os.path.exists("./source/files"):
             for file in os.listdir("./source/files"):
                 fp = os.path.join("./source/files", file)
@@ -65,7 +79,15 @@ class AbstractLanguageRunner(ABC):
                         shutil.copytree(fp, os.path.join("./submission", os.path.basename(fp)))
                 else:
                     shutil.copy(fp, "./submission")
-
+        print('files retirement')
+        with open('./source/files/retirement.py') as infile:
+            print(infile.read())
+        print('--------')
+        print('submission retirement')
+        with open('./submission/retirement.py') as infile:
+            print(infile.read())
+        print('--------')
+            
         # copy the tests directory
         if os.path.exists("./submission/tests"):
             shutil.rmtree("./submission/tests")

@@ -72,6 +72,10 @@ class PythonRunner(AbstractLanguageRunner):
 
     def run(self):
         os.environ["PATH"] = f"{self.ag_config.miniconda_path}/bin:" + os.environ.get("PATH")
+        
+        print('WORKING DIR 1: ', os.getcwd())
+        print('FILES: ', '\n'.join(os.listdir('.')))
+        print('-------')
 
         with chdir("./submission"):
 
@@ -122,6 +126,9 @@ class PythonRunner(AbstractLanguageRunner):
 
                 log = None
 
+            print('WORKING DIR 2: ', os.getcwd())
+            print('FILES: ', '\n'.join(os.listdir('.')))
+            print('-------')
             scores = grade_notebook(
                 subm_path,
                 tests_glob = glob("./tests/*.py"),
