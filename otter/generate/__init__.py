@@ -125,9 +125,10 @@ LANGUAGE_BASED_CONFIGURATIONS = {
 }
 
 
+# TODO UPDATE DOCSTRING
 def main(*, tests_dir="./tests", output_path="autograder.zip", config=None, no_config=False, 
          lang=None, requirements=None, no_requirements=False, overwrite_requirements=False, 
-         environment=None, no_environment=False, username=None, password=None, token=None, files=[], 
+         environment=None, no_environment=False, username=None, password=None, token=None, files=[], student_files,
          assignment=None, plugin_collection=None, python_version=None, channel_priority_strict=True):
     """
     Run Otter Generate.
@@ -193,6 +194,8 @@ def main(*, tests_dir="./tests", output_path="autograder.zip", config=None, no_c
     elif ("course_id" in otter_config) ^ ("assignment_id" in otter_config):
         raise ValueError(f"Otter config contains 'course_id' or 'assignment_id' but not both")
 
+    otter_config['student_files'] = student_files
+    
     ag_config = AutograderConfig(otter_config)
 
     # update language

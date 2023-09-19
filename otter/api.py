@@ -17,7 +17,7 @@ from .export import export_notebook
 from .run import main as run_grader
 
 
-def grade_submission(submission_path, ag_path="autograder.zip", quiet=False, debug=False):
+def grade_submission(submission_path, ag_path="autograder.zip", otter_assign=False, quiet=False, debug=False):
     """
     Runs non-containerized grading on a single submission at ``submission_path`` using the autograder 
     configuration file at ``ag_path``. 
@@ -52,7 +52,7 @@ def grade_submission(submission_path, ag_path="autograder.zip", quiet=False, deb
     # TODO: is the output_dir argument of run_grader necessary here?
     with cm:
         results = run_grader(
-            submission_path, autograder=ag_path, output_dir=dp, no_logo=True, debug=debug)
+            submission_path, autograder=ag_path, output_dir=dp, otter_assign=otter_assign, no_logo=True, debug=debug)
 
     if quiet:
         f.close()

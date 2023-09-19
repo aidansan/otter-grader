@@ -63,7 +63,7 @@ class AbstractLanguageRunner(ABC):
                 if os.path.isdir(fp):
                     if not os.path.exists(os.path.join("./submission", os.path.basename(fp))):
                         shutil.copytree(fp, os.path.join("./submission", os.path.basename(fp)))
-                else:
+                elif (file not in self.ag_config.student_files) or self.ag_config._otter_assign:
                     shutil.copy(fp, "./submission")
 
         # copy the tests directory

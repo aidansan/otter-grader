@@ -11,7 +11,7 @@ from .run_autograder import capture_run_output, main as run_autograder_main
 from ..utils import import_or_raise
 
 
-def main(submission, *, autograder="./autograder.zip", output_dir="./", no_logo=False, debug=False):
+def main(submission, *, autograder="./autograder.zip", output_dir="./", otter_assign=False, no_logo=False, debug=False):
     """
     Grades a single submission using the autograder configuration ``autograder`` without
     containerization.
@@ -56,7 +56,7 @@ def main(submission, *, autograder="./autograder.zip", output_dir="./", no_logo=
             shutil.copy(submission, os.path.join(ag_dir, "submission"))
 
         logo = not no_logo
-        run_autograder_main(ag_dir, logo=logo, debug=debug, otter_run=True)
+        run_autograder_main(ag_dir, otter_assign=otter_assign, logo=logo, debug=debug, otter_run=True)
 
         results_path = os.path.join(ag_dir, "results", "results.json")
         shutil.copy(results_path, output_dir)

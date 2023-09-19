@@ -202,6 +202,7 @@ def run_tests(assignment, debug=False):
             str(assignment.ag_notebook_path),
             str(assignment.ag_zip_path),
             debug=debug,
+            otter_assign=True,
         )
 
     LOGGER.debug(f"Otter Run output:\n{run_output.getvalue()}")
@@ -297,6 +298,10 @@ def run_generate_autograder(assignment, gs_username, gs_password, plugin_collect
 
         files += assignment.autograder_files
 
+    if assignment.student_files:
+        # student_files should be a subset of autograder_files
+        assert set(assignment.student_files) & set(assignment.autograder_files) == set(assignment.student_files)
+
     otter_config = assignment.get_otter_config()
     if otter_config:
         # TODO: move this filename into a global variable somewhere and remove all of the places
@@ -317,6 +322,7 @@ def run_generate_autograder(assignment, gs_username, gs_password, plugin_collect
         username=gs_username,
         password=gs_password,
         files=files,
+        student_files=assignment.student_files,
         plugin_collection=plugin_collection,
         assignment=assignment,
         python_version=assignment.get_python_version(),

@@ -176,6 +176,11 @@ class Assignment(fica.Config, Loggable):
         description="a list of other files only to include in the autograder",
         default=[],
     )
+    
+    student_files: list = fica.Key(
+        description="a list of code files student will submit",
+        default=[],
+    )
 
     plugins: List[str] = fica.Key(
         description="a list of plugin names and configurations",

@@ -16,7 +16,7 @@ from ...utils import chdir, import_or_raise, loggers
 LOGGER = loggers.get_logger(__name__)
 
 
-def main(autograder_dir, otter_run=False, **kwargs):
+def main(autograder_dir, otter_assign=False, otter_run=False, **kwargs):
     """
     Run the autograding process.
 
@@ -41,6 +41,7 @@ def main(autograder_dir, otter_run=False, **kwargs):
 
     runner = create_runner(config, **kwargs)
     runner.ag_config._otter_run = otter_run
+    runner.ag_config._otter_assign = otter_assign
 
     if runner.get_option("log_level") is not None:
         loggers.set_level(runner.get_option("log_level"))

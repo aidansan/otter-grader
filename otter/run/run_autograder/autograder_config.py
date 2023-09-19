@@ -163,5 +163,10 @@ class AutograderConfig(fica.Config):
         default=False,
     )
 
+    student_files = fica.Key(
+        description="a list of code files student will submit",
+        default=[],
+    )
+
     _otter_run = False
     """whether this autograder run is being run by Otter Run (i.e. without containerization)"""
